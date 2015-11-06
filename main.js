@@ -5,12 +5,15 @@ var animation;
 var flasherTimer;
 var lastCollusion;
 var collusion = false;
+var blocked;
 
 function flasher(cls) {
   clearTimeout(flasherTimer);
   document.body.classList.add(cls);
+  blocked = true;
   flasherTimer = setTimeout(function () {
     document.body.classList.remove(cls);
+    blocked = false;
   }, 1000);
 }
 
@@ -34,23 +37,31 @@ function randomRotate() {
   return newRandom;
 }
 
+function transformer(element, value) {
+  var el = document.getElementById(element);
+  el.style.transform = value;
+  el.style.WebkitTransform = value;
+}
+
 function assignLockPosition() {
   var lockPosition = randomRotate();
-  document.getElementById("locker").style.transform = 'rotate('+ lockPosition +'deg)';
+  transformer('locker', 'rotate('+ lockPosition +'deg)');
   return lockPosition;
 }
 
 function assignKeyPosition(pos) {
-  document.getElementById("key").style.transform = 'rotate('+ pos +'deg)';
+  transformer('key', 'rotate('+ pos +'deg)');
 }
 
 function getKeyPosition() {
-  var degree = document.getElementById("key").style.transform.match(/\-?\d+/);
+  var el = document.getElementById("key");
+  var degree = (el.style.transform || el.style.WebkitTransform).match(/\-?\d+/);
   return degree ? +degree[0] : 0;
 }
 
 function getLockPosition() {
-  var degree = document.getElementById("locker").style.transform.match(/\-?\d+/);
+  var el = document.getElementById("locker");
+  var degree = (el.style.transform || el.style.WebkitTransform).match(/\-?\d+/);
   return degree ? +degree[0] : 0;
 }
 
@@ -115,6 +126,9 @@ function reset() {
 function setStartEvent(fn) {
   document.body.onkeydown = document.body.onmousedown = function (e) {
     if (e.keyCode !== undefined && e.keyCode !== 32) {
+      return;
+    }
+    if (blocked) {
       return;
     }
     fn();
