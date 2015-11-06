@@ -54,17 +54,21 @@ function getLockPosition() {
   return degree ? +degree[0] : 0;
 }
 
-function checkCollision() {
-  var locker = getLockPosition();
-  var key = getKeyPosition();
+function checkCurrentCollusion() {
+  var locker = 360 - (getLockPosition() % 360);
+  var key = 360 - (getKeyPosition() % 360);
   var diff = Math.abs(locker - key) % 360;
-  collusion = diff <= 15;
-  if (collusion) {
+  return (diff <= 7);
+}
+
+function checkCollision() {
+  collusion = checkCurrentCollusion();
+  if (collusion === true) {
     lastCollusion = collusion;
   }
   if (lastCollusion === true && collusion === false) {
     fail();
-    return;
+    lastCollusion = null;
   }
 }
 
@@ -105,12 +109,11 @@ function reset() {
   assignLockPosition();
   setLevel(localStorage.getItem('level'));
   setStartEvent(main);
-  lastCollusion = null;
   collusion = false;
 }
 
 function setStartEvent(fn) {
-  document.body.onkeydown = document.body.onclick = function (e) {
+  document.body.onkeydown = document.body.onmousedown = function (e) {
     if (e.keyCode !== undefined && e.keyCode !== 32) {
       return;
     }
@@ -123,10 +126,10 @@ function main() {
 
   setStartEvent(function (e) {
     direction *= -1;
-    if (collusion === false) {
-      fail();
-    } else {
+    if (checkCurrentCollusion()) {
       correct();
+    } else {
+      fail();
     }
   });
 
