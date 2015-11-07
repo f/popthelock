@@ -7,14 +7,14 @@ var lastCollusion;
 var collusion = false;
 var blocked;
 
-function flasher(cls) {
+function flasher(cls, wait) {
   clearTimeout(flasherTimer);
   document.body.classList.add(cls);
   blocked = true;
   flasherTimer = setTimeout(function () {
     document.body.classList.remove(cls);
     blocked = false;
-  }, 1000);
+  }, wait || 400);
 }
 
 function getLevel() {
@@ -83,11 +83,26 @@ function checkCollision() {
   }
 }
 
+function playSound(soundfile) {
+  if (!Audio) return;
+  var audio = new Audio('./sounds/' + soundfile + '.wav');
+  audio.play();
+}
+
 function levelUp() {
   var newLevel = +localStorage.getItem('level') + 1;
-  localStorage.setItem('level', newLevel);
-  setLevel(newLevel);
-  flasher('levelUp');
+  (function (timeout) {
+    flasher('levelUp', timeout);
+    playSound('unlocked');
+    setTimeout(function () {
+      localStorage.setItem('level', newLevel);
+      setLevel(newLevel);
+    }, timeout / 2);
+    setTimeout(function () {
+      playSound('locked');
+    }, timeout);
+  })(2800);
+
 }
 
 function keySolved() {
@@ -103,6 +118,7 @@ function setLevel(level) {
 function correct() {
   lastCollusion = null;
   assignLockPosition();
+  playSound('click');
   if (keySolved() === 0) {
     levelUp();
     reset();

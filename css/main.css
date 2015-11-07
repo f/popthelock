@@ -99,7 +99,7 @@ body.fail, body.fail #inlock {
   }
 
   25% {
-    transform: rotate(0deg);
+    transform: rotate(-5deg);
   }
 
   50% {
@@ -112,22 +112,50 @@ body.fail, body.fail #inlock {
 }
 
 @keyframes opener {
+  10% {
+    top: 180px;
+  }
+
+  75% {
+    top: 180px;
+  }
+
   100% {
     top: 80px;
   }
 }
 
+@keyframes slider {
+  0% {
+    left: 50%;
+  }
+  50% {
+    left: -300px;
+  }
+  50.1% {
+    left: calc(100% + 300px);
+  }
+  100% {
+    left: 50%;
+  }
+}
+
 body.fail #lock {
-  animation: failer 600ms;
+  animation: failer 400ms;
 }
 
 body.levelUp #uplock {
-  animation: opener 300ms;
-  animation-fill-mode: forwards
+  animation: opener 600ms;
+  animation-fill-mode: forwards;
+}
+
+body.levelUp #lock {
+  animation: slider 2s;
+  animation-delay: 650ms;
 }
 
 body.levelUp, body.levelUp #inlock {
-  background-color: #92C1A7;
+  background-color: #209C6A;
 }
 
 body.levelUp #locker, body.fail #locker, body.levelUp #key, body.fail #key {
