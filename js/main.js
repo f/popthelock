@@ -6,6 +6,7 @@ var flasherTimer;
 var lastCollusion;
 var collusion = false;
 var blocked;
+var audios = {};
 
 function flasher(cls, wait) {
   clearTimeout(flasherTimer);
@@ -85,8 +86,10 @@ function checkCollision() {
 
 function playSound(soundfile) {
   if (!Audio) return;
-  var audio = new Audio('./sounds/' + soundfile + '.wav');
-  audio.play();
+  if (!audios[soundfile]) {
+    audios[soundfile] = new Audio('./sounds/' + soundfile + '.wav');
+  }
+  audios[soundfile].play();
 }
 
 function levelUp() {
