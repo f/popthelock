@@ -6,7 +6,11 @@ var flasherTimer;
 var lastCollusion;
 var collusion = false;
 var blocked;
-var audios = {};
+var audios = {
+  locked: new Audio('./sounds/locked.wav'),
+  unlocked: new Audio('./sounds/unlocked.wav'),
+  click: new Audio('./sounds/click.wav')
+};
 
 function flasher(cls, wait) {
   clearTimeout(flasherTimer);
