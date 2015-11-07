@@ -125,16 +125,21 @@ body.fail, body.fail #inlock {
   }
 }
 
-@keyframes slider {
+@keyframes toLeft {
   0% {
     left: 50%;
   }
-  50% {
-    left: -300px;
+
+  100% {
+    left: -110%;
   }
-  50.1% {
-    left: calc(100% + 300px);
+}
+
+@keyframes fromRight {
+  0% {
+    left: 110%;
   }
+
   100% {
     left: 50%;
   }
@@ -150,8 +155,7 @@ body.levelUp #uplock {
 }
 
 body.levelUp #lock {
-  animation: slider 2s;
-  animation-delay: 650ms;
+  animation: toLeft 1s 0.65s ease, fromRight 0.7s 1.65s ease;
 }
 
 body.levelUp, body.levelUp #inlock {
