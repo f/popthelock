@@ -58,15 +58,19 @@ function assignKeyPosition(pos) {
   transformer('key', 'rotate('+ pos +'deg)');
 }
 
+function getCSSTransform(el) {
+  return (el.style.MozTransform || el.style.WebkitTransform || el.style.transform);
+}
+
 function getKeyPosition() {
   var el = document.getElementById("key");
-  var degree = (el.style.transform || el.style.WebkitTransform).match(/\-?\d+/);
+  var degree = getCSSTransform(el).match(/\-?\d+/);
   return degree ? +degree[0] : 0;
 }
 
 function getLockPosition() {
   var el = document.getElementById("locker");
-  var degree = (el.style.transform || el.style.WebkitTransform).match(/\-?\d+/);
+  var degree = getCSSTransform(el).match(/\-?\d+/);
   return degree ? +degree[0] : 0;
 }
 
@@ -113,13 +117,13 @@ function levelUp() {
 }
 
 function keySolved() {
-  var currentKey = +document.getElementById("level").innerText - 1;
-  document.getElementById("level").innerText = currentKey;
+  var currentKey = +document.getElementById("level").innerHTML - 1;
+  document.getElementById("level").innerHTML = currentKey;
   return currentKey;
 }
 
 function setLevel(level) {
-  document.getElementById("level").innerText = +(level || 1);
+  document.getElementById("level").innerHTML = +(level || 1);
 }
 
 function correct() {
